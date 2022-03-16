@@ -15,68 +15,66 @@ const manager = new TradeofferManager({
         "language": 'en' // Может быть любой язык
 });
  
-// Вход в аккаунт с использованием config.js
+//login account using config.js
  
 const logOnOptions = {
-    "accountName": config.steam.username,
-    "password": config.steam.password,
-    "twoFactorCode": SteamTotp.generateAuthCode(config.steam.twoFactorCode)
+    "accountName": config.steam.username, //get login
+    "password": config.steam.password,	 //get password
+    "twoFactorCode": SteamTotp.generateAuthCode(config.steam.twoFactorCode) //get two factor code
 };
  
 client.logOn(logOnOptions);
  
-// События которые происходят при успешном логине бота
+//Events that upon successful login of the bot 
  
-client.on('loggedOn', () => {
-        console.log('[!]Бот авторизовался!');
+client.on('loggedOn', () => { //Login account or exit
+        console.log('[!]Бот авторизовался!'); //Message: Bot logged!
     
-        client.setPersona(SteamUser.EPersonaState.Online, config.steam.botname);
-        //client.gamesPlayed(730);
- 
-        //console.log('[!]Бот сейчас играет в CS:GO');
+        client.setPersona(SteamUser.EPersonaState.Online, config.steam.botname); //changes status profile and changer status profile online
+        //client.gamesPlayed(730); //endered in game bot 730 -> CSGO
 });
  
-// Функция проверки трейдов
+//function trade verification
  
-client.on('webSession', (sessionid, cookies) => {
-        manager.setCookies(cookies);
+client.on('webSession', (sessionid, cookies) => { //Emitted when a steamcommunity.com web session is successfully negotiated.
+        manager.setCookies(cookies); //
  
         community.setCookies(cookies);
         community.startConfirmationChecker(config.steam.refreshInterval, config.steam.identity_secret);
 });
  
-// Если кто-то добавил бота
+//If other user add bot in friends
  
 client.on('friendRelationship', (steamid, relationship) => {
-    if (relationship === 2) {
-        console.log('[!]Кто-то добавил бота!'); 
+    if (relationship === 2) { // if new freinds
+        console.log('[!]Кто-то добавил бота!'); //Message: Some-one add bot! 
     }
 });
  
-// Принятие/отклонение трейдов
+//Adoption/Deviation trades
  
 manager.on('newOffer', (offer) => {
-    if (offer.itemsToGive.length === 0) {
-        offer.accept((err, status) => {
+    if (offer.itemsToGive.length === 0) { //If other users don't want receive your items 
+        offer.accept((err, status) => { //Accept trade
             if (err) {
                 console.log(err);
             } else {
-                console.log(`[!]Трейд принят! Статус: ${status}.`);
+                console.log(`[!]Трейд принят! Статус: ${status}.`); //Message: Trade accept!
  
             }
         });
     } else {
-        offer.decline((err) => {
-            if (err) {
+        offer.decline((err) => { //Rejected trade
+            if (err) { 
                 console.log(err);
             } else {
-                console.log(`[!]Трейд отклонён! (Попытка вывода предметов бота).`)
+                console.log(`[!]Трейд отклонён! (Попытка вывода предметов бота).`) //Message: Trade rejected!
             }
         });
      }
 });
 
-//Отправка трейда
+//Adoption trades
 
 client.on('webSession', function(sessionID, cookies) {
 	manager.setCookies(cookies, function(err) {

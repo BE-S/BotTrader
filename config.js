@@ -3,11 +3,11 @@
 module.exports = {
  
     steam : {
-        username: 'Simple200000',             
-        password: 'L14e02n81',
-        twoFactorCode: '',
-        identity_secret: 'https://steamcommunity.com/tradeoffer/new/?partner=194631039&token=8b-XOYAZ',
-        botname: '',
-        refreshInterval: 10000,
+        username: 'login', //user login         
+        password: 'pass', //user password
+        twoFactorCode: '', //two factor code
+        identity_secret: '', //link trade
+        botname: '', //set name for profile steam
+        refreshInterval: 10000, //
     },
 };
